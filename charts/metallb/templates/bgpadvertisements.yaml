@@ -1,0 +1,15 @@
+{{- $idx := 0 -}}
+{{- range .Values.BGPAdvertisements }}
+apiVersion: metallb.io/v1beta1
+kind: BGPAdvertisement
+metadata:
+  name: {{ .name | default ( printf "%s-%d" "bgpadv" $idx ) }}
+  namespace: {{ $.Release.Namespace | default $.Values.defaultNamespace | quote }}
+spec:
+  {{- $new := omit . "name" "IPAddressPools" "IPAddressPoolSelectors" }}
+  {{- $new := set $new "ipAddressPools" ( concat ( .ipAddressPools | default (list) ) ( .IPAddressPools | default (list) ) ) }}
+  {{- $new := set $new "ipAddressPoolSelectors" ( concat ( .ipAddressPoolSelectors | default (list) ) ( .IPAddressPoolSelectors | default (list) ) ) }}
+  {{- toYaml $new | nindent 2 }}
+{{- $idx = add1 $idx }}
+---
+{{- end }}

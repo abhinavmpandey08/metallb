@@ -59,6 +59,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: {{ include "metallb.fullname" . }}-pod-lister
+  namespace: {{ .Release.Namespace | default .Values.defaultNamespace | quote }}
   labels: {{- include "metallb.labels" . | nindent 4 }}
 rules:
 - apiGroups: [""]
@@ -93,6 +94,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: {{ include "metallb.fullname" . }}-controller
+  namespace: {{ .Release.Namespace | default .Values.defaultNamespace | quote }}
   labels: {{- include "metallb.labels" . | nindent 4 }}
 rules:
 {{- if .Values.speaker.memberlist.enabled }}
@@ -142,7 +144,7 @@ metadata:
 subjects:
 - kind: ServiceAccount
   name: {{ template "metallb.controller.serviceAccountName" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | default .Values.defaultNamespace | quote }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -157,7 +159,7 @@ metadata:
 subjects:
 - kind: ServiceAccount
   name: {{ template "metallb.speaker.serviceAccountName" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace | default .Values.defaultNamespace | quote }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -167,6 +169,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: {{ include "metallb.fullname" . }}-pod-lister
+  namespace: {{ .Release.Namespace | default .Values.defaultNamespace | quote }}
   labels: {{- include "metallb.labels" . | nindent 4 }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -180,6 +183,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: {{ include "metallb.fullname" . }}-controller
+  namespace: {{ .Release.Namespace | default .Values.defaultNamespace | quote }}
   labels: {{- include "metallb.labels" . | nindent 4 }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io

@@ -62,11 +62,8 @@
             "repository": {
               "type": "string"
             },
-            "tag": {
-              "anyOf": [
-                { "type": "string" },
-                { "type": "null" }
-              ]
+            "digest": {
+              "type": "string"
             },
             "pullPolicy": {
               "anyOf": [
@@ -333,35 +330,6 @@
             },
             "secretName": {
               "type": "string"
-            },
-            "frr": {
-              "description": "Install FRR container in speaker deployment",
-              "type": "object",
-              "properties": {
-                "enabled": {
-                  "type": "boolean"
-                },
-                "image": { "$ref": "#/definitions/component/properties/image" },
-                "metricsPort": { "type": "integer" },
-                "secureMetricsPort": { "type": "integer" },
-                "resources:": { "type": "object" }
-              },
-              "required": [ "enabled" ]
-            },
-            "command" : {
-              "type": "string"
-            },
-            "reloader": {
-              "type": "object",
-              "properties": {
-                "resources": { "type": "object" }
-              }
-            },
-            "frrMetrics": {
-              "type": "object",
-              "properties": {
-                "resources": { "type": "object" }
-              }
             }
           },
           "required": [ "tolerateMaster" ]
@@ -372,10 +340,6 @@
       "description": "CRD configuration",
       "type": "object",
       "properties": {
-        "enabled": {
-          "description": "Enable CRDs",
-          "type": "boolean"
-        },
         "validationFailurePolicy": {
           "description": "Failure policy to use with validating webhooks",
           "type": "string",

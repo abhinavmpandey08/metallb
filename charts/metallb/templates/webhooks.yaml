@@ -10,7 +10,7 @@ webhooks:
   clientConfig:
     service:
       name: metallb-webhook-service
-      namespace: {{ .Release.Namespace }}
+      namespace: {{ .Release.Namespace | default .Values.defaultNamespace | quote }}
       path: /validate-metallb-io-v1beta1-addresspool
   failurePolicy: {{ .Values.crds.validationFailurePolicy }}
   name: addresspoolvalidationwebhook.metallb.io
@@ -30,7 +30,7 @@ webhooks:
   clientConfig:
     service:
       name: metallb-webhook-service
-      namespace: {{ .Release.Namespace }}
+      namespace: {{ .Release.Namespace | default .Values.defaultNamespace | quote }}
       path: /validate-metallb-io-v1beta2-bgppeer
   failurePolicy: {{ .Values.crds.validationFailurePolicy }}
   name: bgppeervalidationwebhook.metallb.io
@@ -50,7 +50,7 @@ webhooks:
   clientConfig:
     service:
       name: metallb-webhook-service
-      namespace: {{ .Release.Namespace }}
+      namespace: {{ .Release.Namespace | default .Values.defaultNamespace | quote }}
       path: /validate-metallb-io-v1beta1-ipaddresspool
   failurePolicy: {{ .Values.crds.validationFailurePolicy }}
   name: ipaddresspoolvalidationwebhook.metallb.io
@@ -70,7 +70,7 @@ webhooks:
   clientConfig:
     service:
       name: metallb-webhook-service
-      namespace: {{ .Release.Namespace }}
+      namespace: {{ .Release.Namespace | default .Values.defaultNamespace | quote }}
       path: /validate-metallb-io-v1beta1-bgpadvertisement
   failurePolicy: {{ .Values.crds.validationFailurePolicy }}
   name: bgpadvertisementvalidationwebhook.metallb.io
@@ -90,7 +90,7 @@ webhooks:
   clientConfig:
     service:
       name: metallb-webhook-service
-      namespace: {{ .Release.Namespace }}
+      namespace: {{ .Release.Namespace | default .Values.defaultNamespace | quote }}
       path: /validate-metallb-io-v1beta1-community
   failurePolicy: {{ .Values.crds.validationFailurePolicy }}
   name: communityvalidationwebhook.metallb.io
@@ -110,7 +110,7 @@ webhooks:
   clientConfig:
     service:
       name: metallb-webhook-service
-      namespace: {{ .Release.Namespace }}
+      namespace: {{ .Release.Namespace | default .Values.defaultNamespace | quote }}
       path: /validate-metallb-io-v1beta1-bfdprofile
   failurePolicy: {{ .Values.crds.validationFailurePolicy }}
   name: bfdprofilevalidationwebhook.metallb.io
@@ -130,7 +130,7 @@ webhooks:
   clientConfig:
     service:
       name: metallb-webhook-service
-      namespace: {{ .Release.Namespace }}
+      namespace: {{ .Release.Namespace | default .Values.defaultNamespace | quote }}
       path: /validate-metallb-io-v1beta1-l2advertisement
   failurePolicy: {{ .Values.crds.validationFailurePolicy }}
   name: l2advertisementvalidationwebhook.metallb.io
@@ -150,6 +150,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: metallb-webhook-service
+  namespace: {{ .Release.Namespace | default .Values.defaultNamespace | quote }}
   labels:
     {{- include "metallb.labels" . | nindent 4 }}
 spec:
@@ -164,5 +165,6 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: webhook-server-cert
+  namespace: {{ .Release.Namespace | default .Values.defaultNamespace | quote }}
   labels:
     {{- include "metallb.labels" . | nindent 4 }}
