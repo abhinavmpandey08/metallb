@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "metallb.fullname" . }}-controller
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ .Release.Namespace | default .Values.defaultNamespace | quote }}
   labels:
     {{- include "metallb.labels" . | nindent 4 }}
     app.kubernetes.io/component: controller
@@ -52,7 +52,7 @@ spec:
 {{- end }}
       containers:
       - name: controller
-        image: {{ .Values.controller.image.repository }}:{{ .Values.controller.image.tag | default .Chart.AppVersion }}
+        image: {{ .Values.sourceRegistry }}/{{ .Values.controller.image.repository }}@{{ .Values.controller.image.digest }}
         {{- if .Values.controller.image.pullPolicy }}
         imagePullPolicy: {{ .Values.controller.image.pullPolicy }}
         {{- end }}
@@ -78,10 +78,6 @@ spec:
           value: {{ include "metallb.secretName" . }}
         - name: METALLB_DEPLOYMENT
           value: {{ template "metallb.fullname" . }}-controller
-        {{- end }}
-        {{- if .Values.speaker.frr.enabled }}
-        - name: METALLB_BGP_TYPE
-          value: frr
         {{- end }}
         ports:
         - name: monitoring

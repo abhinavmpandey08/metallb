@@ -1,0 +1,13 @@
+{{- $idx := 0 -}}
+{{- range .Values.BGPPeers }}
+apiVersion: metallb.io/v1beta2
+kind: BGPPeer
+metadata:
+  name: {{ .name | default ( printf "%s-%d" "bgppeer" $idx ) }}
+  namespace: {{ $.Release.Namespace | default $.Values.defaultNamespace | quote }}
+spec:
+  {{- $render := omit . "name" }}
+  {{- toYaml $render | nindent 2 }}
+{{- $idx = add1 $idx }}
+---
+{{- end }}
